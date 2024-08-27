@@ -7,16 +7,23 @@
 
 # 
 
-# In[159]:
+# In[6]:
 
 
 import pandas as ds
+import matplotlib.pyplot as plt
 
 result = ds.read_excel('dados.xlsx')
 result.describe()
 
 
-# In[160]:
+# In[ ]:
+
+
+
+
+
+# In[ ]:
 
 
 colunas = result.columns
@@ -37,10 +44,10 @@ def dadosDaPlanilha():
     return listaDeDados
 
 
-# In[164]:
+# In[ ]:
 
 
-def inserirNaPlanilha(listaDeDados):
+def inserirNaPlanilha(listaDeDados,result):
     myColunas = ['Sexo', 'Idade', 'Estado civil', 'Número de filhos',
                        'Qual refeição você mais gosta ?\n', 'Qual refeição você menos gosta ?',
                        'Qual refeição você não pode consumir',
@@ -49,21 +56,120 @@ def inserirNaPlanilha(listaDeDados):
     novaLinha = dict(zip(myColunas, listaDeDados))
     result.loc[len(result)] = novaLinha
     result.to_excel("saidas.xlsx", index=False)
-    
-
-
-# In[165]:
 
 
 lista = ("Masculino", 18, "Casado",
  5, "cuscuz com leite" ,"Cuscuz com fígado","NENHUMA",5 ,"test")
+inserirNaPlanilha(lista,result)
 
-inserirNaPlanilha(lista)
+
 
 
 # In[ ]:
 
 
+result.plot(x='Idade', y='Número de filhos', kind='scatter')
+result.plot(x='Idade', y='Qual refeição você mais gosta ?\n', kind='scatter')
+result.plot(x='Idade', y='Qual refeição você menos gosta ?', kind='scatter')
+
+
+# In[ ]:
+
+
+result.plot.area()
+result.plot.area(x='Idade', y='Número de filhos', stacked=False)
+
+
+# In[ ]:
+
+
+result.plot.barh()
+
+
+# In[ ]:
+
+
+result
+
+
+# In[ ]:
+
+
+result.plot.barh(stacked=True)
+
+
+# In[ ]:
+
+
+result.apply(ds.value_counts).plot(kind='bar', subplots=True)
+
+
+# result.apply(ds.value_counts).plot(kind='bar', subplots=True)
+
+# In[5]:
+
+
+dfCopy = result[['Idade']].copy()
+result.plot.kde()
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+result.plot(title='Dados')
+
+
+# In[ ]:
+
+
+dfRelation = result.loc[(result['Estado civil'] == "Solteiro") & (result['Sexo'] == "Mulher" )]
+dfRelation.plot(x='Idade', y='Número de filhos', kind='scatter')
+dfRelation.plot(x='Idade', y='Qual refeição você mais gosta ?\n', kind='scatter')
+dfRelation.plot(x='Idade', y='Qual refeição você menos gosta ?', kind='scatter')
+
+
+# In[ ]:
+
+
+dfRelation
+
+
+# In[ ]:
+
+
+result.plot(x='Idade', y='Número de filhos', kind='')
+
+
+# 
+
+# ## Gráfico das preferências dos alunos
+#  É possível observar as referencias dos alunos
+
+# In[ ]:
+
+
+fig, ax = plt.subplots()
+
+
+result.plot(x='Idade', y='Qual refeição você não pode consumir', kind='scatter', color='red', label='Não pode consumir', ax=ax)
+result.plot(x='Idade', y='Qual refeição você mais gosta ?\n', kind='scatter', color='blue', label='Mais gosta', ax=ax)
+result.plot(x='Idade', y='Qual refeição você menos gosta ?', kind='scatter', color='green', label='Menos gosta', ax=ax)
+plt.title('Distribuição das Preferências de Refeições por Idade')
+plt.xlabel('Idade')
+plt.ylabel('Refeições')
+plt.legend()
 
 
 
